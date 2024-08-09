@@ -41,10 +41,18 @@ const Star = ({ onRating, isFull, onMouseIn, onMouseOut, color, size }) => {
   );
 };
 
-const StarRating = ({ maxLength = 5, color = "#fcc419", size = 49 }) => {
+const StarRating = ({
+  maxLength = 5,
+  color = "#fcc419",
+  size = 49,
+  onsetRating,
+}) => {
   const [rating, setRating] = useState(0);
   const [tempRating, setTempRating] = useState(0);
-
+  function handleRating(rating) {
+    setRating(rating);
+    onsetRating(rating);
+  }
   return (
     <div className="star-rating-div">
       {Array.from({ length: maxLength }, (_, index) => {
@@ -52,14 +60,14 @@ const StarRating = ({ maxLength = 5, color = "#fcc419", size = 49 }) => {
           <Star
             size={size}
             color={color}
-            onRating={() => setRating(index + 1)}
+            onRating={() => handleRating(index + 1)}
             onMouseIn={() => setTempRating(index + 1)}
             onMouseOut={() => setTempRating(0)}
             isFull={tempRating ? tempRating >= index + 1 : rating >= index + 1}
           />
         );
       })}
-      <p>{rating}</p>
+      {rating}
     </div>
   );
 };
