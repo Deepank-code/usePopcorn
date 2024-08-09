@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 
 const average = (arr) =>
@@ -23,6 +23,20 @@ const NumResult = ({ movies }) => {
   );
 };
 const Search = ({ query, setQuery }) => {
+  const inputEle = useRef(null);
+  useEffect(() => {
+    function cb(e) {
+      if (document.activeElement === inputEle.current) return;
+      if (e.code === "Enter") {
+        inputEle.current.focus();
+        setQuery("");
+      }
+    }
+
+    document.addEventListener("keydown", cb);
+    return () => document.addEventListener("keydown", cb);
+  }, []);
+
   return (
     <input
       className="search"
@@ -30,6 +44,7 @@ const Search = ({ query, setQuery }) => {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={inputEle}
     />
   );
 };
